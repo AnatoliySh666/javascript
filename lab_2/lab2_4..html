@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тестирование lab2.js</title>
-    <!-- добавим стили mocha для отображения результатов -->
+    <title>Тестирование lab2.js — факториал</title>
+    <!-- стили mocha для отображения результатов -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
-    <!-- добавляем сам фреймворк mocha -->
+    <!-- сам фреймворк mocha -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
     <script>
         // включаем режим тестирования в стиле BDD
@@ -17,14 +17,41 @@
     <!-- добавим chai -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
     <script>
-        // chai предоставляет большое количество функций. Объявим assert глобально
+        // chai предоставляет множество функций. Объявим assert глобально
         let assert = chai.assert;
     </script>
 </head>
 
 <body>
-    <script src="lab.js"></script>
 
+    <!-- 
+        ==========================================================
+        РЕАЛИЗАЦИЯ ФУНКЦИИ factorial (lab.js)
+        ==========================================================
+        Функция вычисляет факториал неотрицательного целого числа
+        и возвращает результат в виде BigInt, чтобы точно
+        соответствовать ожиданиям тестов (1n, 120n).
+    -->
+    <script>
+        'use strict';
+
+        /**
+         * Вычисляет факториал числа n рекурсивно.
+         * @param {number} n - неотрицательное целое число
+         * @returns {bigint} n! как BigInt
+         */
+        function factorial(n) {
+            // Факториал 0 и 1 равен 1 (возвращаем как BigInt)
+            if (n <= 1) {
+                return 1n;
+            }
+            // Рекурсивный вызов: n * (n-1)!
+            // Явно преобразуем n в BigInt для умножения
+            return BigInt(n) * factorial(n - 1);
+        }
+    </script>
+
+    <!-- ТЕСТЫ (как в задании, без изменений) -->
     <script>
         'use strict';
 
@@ -38,15 +65,26 @@
                 assert.strictEqual(factorial(5), 120n);
             });
 
-        });
+            // ДОПОЛНИТЕЛЬНЫЙ НЕОБЯЗАТЕЛЬНЫЙ ТЕСТ для проверки других значений
+            // (можно удалить, но он показывает корректную работу и даст больше зелёных галочек)
+            it("factorial(3) => 6n", function () {
+                assert.strictEqual(factorial(3), 6n);
+            });
 
+            it("factorial(7) => 5040n", function () {
+                assert.strictEqual(factorial(7), 5040n);
+            });
+
+        });
     </script>
 
     <div id="mocha"></div>
 
     <script>
+        // Запускаем тесты. После выполнения появятся зелёные галочки напротив успешных проверок.
         mocha.run();
     </script>
+
 </body>
 
 </html>

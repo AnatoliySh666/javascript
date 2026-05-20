@@ -27,22 +27,18 @@
 
     <script>
         'use strict';
+        describe("fib", function () {
 
-        describe("pow", function () {
-
-            it("pow(2, 2) => 4", function () {
-                assert.strictEqual(pow(2, 2), 4);
+            it("fib(0) => 0n", function () {
+                assert.strictEqual(fib(0), 0n);
             });
 
-            it("pow(2, 0) => 1", function () {
-                assert.strictEqual(pow(2, 0), 1);
-            });
-
-            it("pow(2, -2) => 0.25", function () {
-                assert.strictEqual(pow(2, -2), 0.25);
+            it("fib(100) => 354224848179261915075n", function () {
+                assert.strictEqual(fib(100), 354224848179261915075n);
             });
 
         });
+
     </script>
 
     <div id="mocha"></div>

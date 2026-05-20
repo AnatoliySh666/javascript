@@ -28,21 +28,26 @@
     <script>
         'use strict';
 
-        describe("pow", function () {
+        describe("isLeapYear", function () {
 
-            it("pow(2, 2) => 4", function () {
-                assert.strictEqual(pow(2, 2), 4);
+            it("isLeapYear(2024) => true", function () {
+                assert.isTrue(isLeapYear(2024));
             });
 
-            it("pow(2, 0) => 1", function () {
-                assert.strictEqual(pow(2, 0), 1);
+            it("isLeapYear(2025) => false", function () {
+                assert.isFalse(isLeapYear(2025));
             });
 
-            it("pow(2, -2) => 0.25", function () {
-                assert.strictEqual(pow(2, -2), 0.25);
+            it("isLeapYear(2000) => true", function () {
+                assert.isTrue(isLeapYear(2000));
+            });
+
+            it("isLeapYear(1900) => false", function () {
+                assert.isFalse(isLeapYear(1900));
             });
 
         });
+
     </script>
 
     <div id="mocha"></div>

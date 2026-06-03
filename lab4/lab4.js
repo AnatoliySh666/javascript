@@ -1,8 +1,10 @@
 // Класс Book представляет книгу с названием, годом публикации и ценой
 class Book {
-    // Приватные поля
-    #title;
-    #pubYear;
+    // Защищённые поля (доступны по соглашению внутри класса и наследникам)
+    _title;
+    _pubYear;
+    
+    // Приватное поле (доступно только внутри класса)
     #price;
 
     /**
@@ -14,14 +16,14 @@ class Book {
     constructor(title, pubYear, price) {
         this.title = title;
         this.pubYear = pubYear;
-        this.price = price;
+        this.#price = price;
     }
 
     /**
      * Возвращает название книги.
      */
     get title() {
-        return this.#title;
+        return this._title;
     }
 
     /**
@@ -32,14 +34,14 @@ class Book {
         if (typeof value !== 'string' || value.trim() === '') {
             throw new Error("Заголовок не может быть пустым");
         }
-        this.#title = value;
+        this._title = value;
     }
 
     /**
      * Возвращает год публикации книги.
      */
     get pubYear() {
-        return this.#pubYear;
+        return this._pubYear;
     }
 
     /**
@@ -54,7 +56,7 @@ class Book {
         ) {
             throw new Error("Год публикации должен быть положительным целым числом");
         }
-        this.#pubYear = value;
+        this._pubYear = value;
     }
 
     /**

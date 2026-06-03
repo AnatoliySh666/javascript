@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Жанры музыки</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .info p {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Жанры музыки</h2>
+
+    <select id="genres">
+        <option value="Rock">Рок</option>
+        <option value="Blues" selected>Блюз</option>
+    </select>
+
+    <div class="info">
+        <p><strong>Значение:</strong> <span id="value"></span></p>
+        <p><strong>Текст:</strong> <span id="text"></span></p>
+    </div>
+</div>
+
+<script>
+    'use strict';
+
+    const genresSelect = document.getElementById('genres');
+
+    // Функция обновления информации
+    function updateInfo() {
+        const selectedOption =
+            genresSelect.options[genresSelect.selectedIndex];
+
+        document.getElementById('value').textContent =
+            selectedOption.value;
+
+        document.getElementById('text').textContent =
+            selectedOption.text;
+    }
+
+    // Добавляем новую опцию и делаем её выбранной
+    const classicOption = new Option('Классика', 'Classic', false, true);
+    genresSelect.append(classicOption);
+
+    // Обновляем отображение после добавления
+    updateInfo();
+
+    // Обновление при смене выбора
+    genresSelect.addEventListener('change', updateInfo);
+</script>
+
+</body>
+</html>

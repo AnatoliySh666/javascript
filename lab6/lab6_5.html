@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Форма</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* Кнопка запуска — по центру, красивая */
+    #start-btn {
+      padding: 14px 32px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      background: white;
+      color: #764ba2;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    #start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      background: #f8f9ff;
+    }
+
+    #start-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Затемнение */
+    #prompt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+
+    /* Контейнер окна — по центру, больше и красивее */
+    #prompt-form-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 35px 45px;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+      z-index: 1000;
+      min-width: 360px;
+      text-align: center;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    /* Сообщение */
+    #prompt-message {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    /* Поле ввода */
+    #prompt-input {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      outline: none;
+      margin-bottom: 25px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    #prompt-input:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+    }
+
+    /* Кнопки */
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    #prompt-ok,
+    #prompt-cancel {
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    #prompt-ok {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    #prompt-ok:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    #prompt-cancel {
+      background: #f0f0f0;
+      color: #666;
+    }
+
+    #prompt-cancel:hover {
+      background: #e4e4e4;
+      transform: scale(1.02);
+    }
+
+    #prompt-ok:active,
+    #prompt-cancel:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <button id="start-btn"> Запустить окно</button>
+
+  <div id="prompt-overlay" hidden>
+    <div id="prompt-form-container">
+      <div id="prompt-message"></div>
+      <input type="text" id="prompt-input" placeholder="Напишите что-то...">
+      <div class="buttons">
+        <button id="prompt-ok">ОК</button>
+        <button id="prompt-cancel">ОТМЕНА</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    const overlay = document.getElementById('prompt-overlay');
+    const msgDiv = document.getElementById('prompt-message');
+    const input = document.getElementById('prompt-input');
+    const okBtn = document.getElementById('prompt-ok');
+    const cancelBtn = document.getElementById('prompt-cancel');
+
+    function showPrompt(html, callback) {
+      overlay.hidden = false;
+      msgDiv.innerHTML = html; 
+      
+      input.value = ''; 
+      input.focus();    
+
+      function close() {
+        overlay.hidden = true;
+        okBtn.onclick = null;
+        cancelBtn.onclick = null;
+        document.onkeydown = null;
+      }
+
+      okBtn.onclick = function() {
+        const val = input.value;
+        close();
+        callback(val);
+      };
+
+      cancelBtn.onclick = function() {
+        close();
+        callback(null);
+      };
+
+      document.onkeydown = function(event) {
+        if (event.code === 'Escape') {
+          close();
+          callback(null);
+        }
+
+        if (event.code === 'Enter') {
+          const val = input.value;
+          close();
+          callback(val);
+        }
+
+        if (event.code === 'Tab') {
+          if (document.activeElement === cancelBtn && !event.shiftKey) {
+            input.focus(); 
+            event.preventDefault();
+          }
+          if (document.activeElement === input && event.shiftKey) {
+            cancelBtn.focus(); 
+            event.preventDefault();
+          }
+        }
+      };
+    }
+
+    document.getElementById('start-btn').onclick = function() {
+      showPrompt("Введите что-нибудь умное ", function(value) {
+        if (value === null) {
+          alert("Результат: отмена");
+        } else {
+          alert("Результат: " + value);
+        }
+      });
+    };
+  </script>
+
+</body>
+</html>

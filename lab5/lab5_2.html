@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список из объекта</title>
+
+    <style>
+        body {
+            font-family: Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        #container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: fit-content;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: square;
+            color: #2c3e50;
+        }
+
+        li {
+            margin: 6px 0;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container"></div>
+
+    <script>
+        'use strict';
+
+        function createTree(container, data) {
+
+            function buildList(treeData) {
+
+                if (Object.keys(treeData).length === 0) {
+                    return null;
+                }
+
+                const list = document.createElement('ul');
+
+                for (const item in treeData) {
+                    const element = document.createElement('li');
+                    element.textContent = item;
+
+                    const nestedList = buildList(treeData[item]);
+
+                    if (nestedList) {
+                        element.append(nestedList);
+                    }
+
+                    list.append(element);
+                }
+
+                return list;
+            }
+
+            container.textContent = '';
+
+            const result = buildList(data);
+
+            if (result) {
+                container.append(result);
+            }
+        }
+
+        const data = {
+            "Рыбы": {
+                "форель": {},
+                "лосось": {}
+            },
+
+            "Деревья": {
+                "Огромные": {
+                    "секвойя": {},
+                    "дуб": {}
+                },
+
+                "Цветковые": {
+                    "яблоня": {},
+                    "магнолия": {}
+                }
+            }
+        };
+
+        const container = document.getElementById('container');
+        createTree(container, data);
+
+    </script>
+
+</body>
+
+</html>
